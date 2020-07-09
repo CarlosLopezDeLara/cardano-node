@@ -1,11 +1,14 @@
+{-# LANGUAGE DerivingStrategies    #-}
 {-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns        #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE UndecidableInstances  #-}
+{-# LANGUAGE StandaloneDeriving    #-}
 {-# LANGUAGE TypeOperators         #-}
 {-# LANGUAGE TypeApplications      #-}
 
@@ -14,10 +17,14 @@
 module Cardano.TracingOrphanInstances.HardFork () where
 
 import           Prelude
+import           Cardano.Prelude (panic, readMaybe)
 
+import           Data.Aeson
+import           Data.Scientific (coefficient)
 import           Data.SOP.Strict
+import qualified Data.Text as Text
+import           Network.Socket (PortNumber)
 
-import           Cardano.Config.Orphanage ()
 import qualified Cardano.Crypto.Hash.Class as Crypto
 import           Cardano.TracingOrphanInstances.Common
 import           Cardano.TracingOrphanInstances.Consensus ()
@@ -232,3 +239,10 @@ instance ToObject (ChainIndepState (BlockProtocol blk))
       => ToObject (WrapChainIndepState blk) where
     toObject verb = toObject verb . unwrapChainIndepState
 
+instance FromJSON PortNumber where
+  parseJSON (Number portNum) = case readMaybe . show $ coefficient portNum of
+                                 Just port -> pure port
+                                 Nothing -> panic $ (Text.pack $ show portNum)
+                                                  <> " is not a valid port number."
+  parseJSON invalid  = panic $ "Parsing of port number failed due to type mismatch. "
+                             <> "Encountered: " <> (Text.pack $ Prelude.show invalid)
