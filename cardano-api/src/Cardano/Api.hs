@@ -504,7 +504,7 @@ buildDummyShelleyTxForFeeCalc txInCount txOutCount ttl network skeys certs wdrls
 
 {-
 inputs outputs, attributes:
-ATxAux { Tx TxWiness Annotation }
+ATxAux { Tx TxWitness Annotation }
 
 Unsigned is just a Tx
 
