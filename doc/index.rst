@@ -35,6 +35,7 @@ cardano-node
    stake-pool-operations/core_relay
    stake-pool-operations/register_stakepool
    stake-pool-operations/start_your_nodes
+   stake-pool-operations/start_your_nodesLV
    stake-pool-operations/retire_stakepool
 
 .. toctree::
@@ -71,6 +72,3 @@ cardano-node
    cardano-adrestia <https://cardano.readthedocs.io/projects/adrestia/en/latest/>
    cardano-wallet <https://cardano.readthedocs.io/projects/cardano-wallet/en/latest/>
    plutus <https://cardano.readthedocs.io/projects/plutus/en/latest/>
-
-
-
